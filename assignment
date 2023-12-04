@@ -1,6 +1,13 @@
 
+###################                LOVE LOCAL ASSIGNMENT         ################
 
 
+Name : Athmika A R
+College: Sahyadri College of Engineering and Management
+USN: 4SF20CS183
+
+
+Language: Python
 
 Easy 1
 
@@ -16,6 +23,11 @@ def length_of_last_word(s):
                                             # it can also coded as, return  len(words[-1])
     else:
         return 0
+
+print(length_of_last_word("Hello World"))  # Output: 5
+print(length_of_last_word("   fly me   to   the moon  "))  # Output: 4
+print(length_of_last_word("luffy is still joyboy"))  # Output: 6
+
 
 Explaination:
 # This function works by splitting the input string s into a list of words, then returning the length of the last word.
@@ -42,6 +54,11 @@ def length_of_last_word1(s):
         i -= 1
 
     return length
+
+print(length_of_last_word("Hello World"))  # Output: 5
+print(length_of_last_word("   fly me   to   the moon  "))  # Output: 4
+print(length_of_last_word("luffy is still joyboy"))  # Output: 6
+
 
 Explaination:
 
@@ -96,6 +113,32 @@ class Solution:
             else:
                 return node
 
+
+#### code for calling above method with one test case #####
+# Construct the BST from the list [6,2,8,0,4,7,9,null,null,3,5]
+root = TreeNode(6)
+root.left = TreeNode(2)
+root.right = TreeNode(8)
+root.left.left = TreeNode(0)
+root.left.right = TreeNode(4)
+root.right.left = TreeNode(7)
+root.right.right = TreeNode(9)
+root.left.right.left = TreeNode(3)
+root.left.right.right = TreeNode(5)
+
+# Create the Solution object
+sol = Solution()
+
+# Call the function with p = 2 and q = 8
+p = TreeNode(2)
+q = TreeNode(8)
+print(sol.lowestCommonAncestor(root, p, q).val)  # Output: 6
+
+# Call the function with p = 2 and q = 4
+p = TreeNode(2)
+q = TreeNode(4)
+print(sol.lowestCommonAncestor(root, p, q).val)  # Output: 2
+
 Explaination:
 
 This function starts at the root node of the BST, then traverses the tree based on the rule of BST: 
@@ -110,7 +153,7 @@ Space complexity --> O(1) because this approach only uses a constant amount of s
 
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
-Hard 3
+Hard 2
 
 Problem:   You are given a string s. You can convert s to a palindrome by adding characters in front of it.
            Return the shortest palindrome you can find by performing this transformation.
@@ -158,6 +201,44 @@ Return Shortest Palindrome: Finally, it returns the shortest palindrome by addin
 
 Time complexity ---> O(n) n is the length of the string. This is because it computes the prefix function in a single pass through the string, and each operation inside the loop takes constant time.
 Space complexity --> O(n) because it stores the prefix function for the entire string, which requires linear space. The input string itself is not counted towards the space complexity, as it is an input to the function.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Solution 2:  || Time complexity ---> O(n)    || Space complexity --> O(n)
+
+# Define the method to find the shortest palindrome
+    def shortestPalindrome(self, s: str) -> str:
+        # Initialize an empty string 'prefix' and a counter 'i' set to 1
+        prefix = ""
+        i = 1
+        # Enter a loop where it checks if the string 'prefix + s' is a palindrome
+        while not self.ispalindrome(prefix + s):
+            # If it's not a palindrome, add the 'i'-th character from the end of 's' to 'prefix' and increment 'i'
+            prefix += s[-i]
+            i += 1
+        # Repeat this process until 'prefix + s' is a palindrome
+        # Finally, return 'prefix + s', which is the shortest possible palindrome
+        return prefix + s
+    
+    # Define the method to check if a string is a palindrome
+    def ispalindrome(self, s: str) -> bool:
+        # A string is a palindrome if it is equal to its reverse
+        return s == s[::-1]
+
+print(shortest_palindrome("aacecaaa"))  # Output: "aaacecaaa"
+print(shortest_palindrome("abcd"))      # Output: "dcbabcd"
+
+Explaination:
+
+ispalindrome: This method checks if a given string s is a palindrome. It does this by comparing the string with its reverse. If they are the same, it returns True, indicating that the string is a palindrome. Otherwise, it returns False.
+shortestPalindrome: This method finds the shortest palindrome by adding characters in front of the input string s.
+It starts with an empty string prefix and a counter i set to 1. 
+It enters a loop where it checks if the string prefix + s is a palindrome.
+If it’s not a palindrome, it adds the i-th character from the end of s to prefix and increments i.
+It repeats this process until prefix + s is a palindrome. Finally, it returns prefix + s, which is the shortest possible palindrome.
+
+
+Time complexity ---> O(n^2) n is the length of the string. This is because for each character in the string, it constructs a new string and checks if it’s a palindrome.Each of these operations takes O(n) so it will become O(n^2).
+Space complexity --> O(n) because it creates a new string prefix that can be as long as the input string s. The input string itself is not counted towards the space complexity, as it is an input to the function.
 
 
 
