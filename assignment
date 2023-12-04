@@ -1,1 +1,166 @@
-hellouhguhjhghgh
+
+
+
+
+Easy 1
+
+Problem: Given a string s consisting of words and spaces, return the length of the last word in the string.
+
+# Solution  1 : || Time complexity ---> O(n)    || Space complexity --> O(n) 
+
+
+def length_of_last_word(s):
+    words = s.split()        # "   fly me   to   the moon  "  converted to ---> [fly,me,to,the,moon]
+    if words:
+        return len(words[len(words) - 1])   # here we are finding lentgh of last word that is moon,
+                                            # it can also coded as, return  len(words[-1])
+    else:
+        return 0
+
+Explaination:
+# This function works by splitting the input string s into a list of words, then returning the length of the last word.
+# If the list of words is empty (which means the input string s was empty or contained only spaces), it returns 0.
+
+Time complexity ---> O(n) n is the length of the input string. This is because the split() function goes through the entire string once, which takes linear time.
+
+Space complexity --> O(n) because in the worst-case scenario (a string with no spaces), the split() function would create a list with one element that is the entire string, which requires linear space.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Solution  2 : || Time complexity ---> O(n)    || Space complexity --> O(1)
+
+def length_of_last_word1(s):
+    length = 0
+    i = len(s) - 1
+
+    # Skip trailing spaces
+    while i >= 0 and s[i] == ' ':
+        i -= 1
+
+    # Count the length of the last word
+    while i >= 0 and s[i] != ' ':
+        length += 1
+        i -= 1
+
+    return length
+
+Explaination:
+
+First, we set up two variables: length is initialized to 0 (this will hold the length of the last word) and i is set to the index of the last character in the string.
+
+Next, we start a loop where we move backwards through the string, skipping any trailing spaces. We do this by checking if the character at the current index i is a space (’ '), and if it is, we decrement i.
+
+Once we encounter a non-space character, we start another loop. In this loop, we continue moving backwards through the string, but this time we increment length for each non-space character we encounter. We keep doing this until we encounter a space or reach the beginning of the string.
+
+Finally, we return length, which by now holds the length of the last word in the string
+
+Time complexity ---> O(n) it may need to look at every character in the string in the worst case.
+
+Space complexity --> O(1) meaning it uses a fixed amount of space regardless of the size of the string.
+
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+Medium 1  
+
+Problem: Given a binary search tree (BST), find the lowest common ancestor (LCA) node of two given nodes in the BST
+
+# Solution  1 : || Time complexity ---> O(n)    || Space complexity --> O(1)
+
+# Definition for a binary tree node.
+class TreeNode:
+    def __init__(self, x):
+        self.val = x
+        self.left = None
+        self.right = None
+
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        # Store the values of p and q
+        p_val = p.val
+        q_val = q.val
+
+        # Start from the root node of the tree
+        node = root
+
+        # Traverse the tree
+        while node:
+            # Value of ancestor/parent node.
+            parent_val = node.val
+
+            # If both p and q are greater than parent, go to the right of the tree
+            if p_val > parent_val and q_val > parent_val:
+                node = node.right
+            # If both p and q are lesser than parent, go to the left of the tree
+            elif p_val < parent_val and q_val < parent_val:
+                node = node.left
+            # We have found the common ancestor node, as p and q are split between two sides
+            else:
+                return node
+
+Explaination:
+
+This function starts at the root node of the BST, then traverses the tree based on the rule of BST: 
+it uses a while loop to traverse the tree
+if both nodes p and q are to the right of the parent, we move to the right of the BST; 
+if both nodes p and q are to the left of the parent, we move to the left of the BST; 
+otherwise, we’ve found the node which is the common ancestor to nodes p and q
+
+Time complexity ---> O(n) n is the number of nodes in the BST. In the worst case, we might have to visit all the nodes of the BST.
+
+Space complexity --> O(1) because this approach only uses a constant amount of space, regardless of the size of the input tree.
+
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+Hard 3
+
+Problem:   You are given a string s. You can convert s to a palindrome by adding characters in front of it.
+           Return the shortest palindrome you can find by performing this transformation.
+
+Solution 1:  || Time complexity ---> O(n)    || Space complexity --> O(n)
+
+def shortest_palindrome(s: str) -> str:
+    # Concatenate the original string, a special character, and the reversed string
+    l = s + "#" + s[::-1]
+    
+    # Initialize the prefix function as a list of zeros with the same length as l
+    prefix_function = [0] * len(l)
+    
+    # Initialize a variable j to 0
+    j = 0
+    
+    # Compute the prefix function for the string l
+    for i in range(1, len(l)):
+        # If the current character doesn't match the character at index j, move j back to the previous longest prefix
+        while j > 0 and l[i] != l[j]:
+            j = prefix_function[j - 1]
+        
+        # If the current character matches the character at index j, increment j
+        if l[i] == l[j]:
+            j += 1
+        
+        # Store the length of the longest prefix up to the current position
+        prefix_function[i] = j
+    
+    # Return the shortest palindrome by adding the reverse of the remaining part of the string s 
+    # (from the position indicated by the last value of the prefix function to the end) to the beginning of the original string s
+    return s[prefix_function[-1]:][::-1] + s
+
+
+print(shortest_palindrome("aacecaaa"))  # Output: "aaacecaaa"
+print(shortest_palindrome("abcd"))      # Output: "dcbabcd"
+
+Explaination:
+
+It uses the concept of a prefix function which is commonly used in string matching algorithms like Knuth-Morris-Pratt (KMP)
+Concatenate String: The function first concatenates the original string s, a special character that doesn’t appear in the string (in this case ‘#’), and the reversed string s[::-1]. This new string is stored in l.
+Initialize Variables: It initializes the prefix_function as a list of zeros with the same length as l, and a variable j to 0
+Compute Prefix Function: It then enters a loop to compute the prefix function for the string l. The prefix function for a position i in the string is the length of the longest proper prefix of the substring that ends at i that is also a suffix of this substring.
+Return Shortest Palindrome: Finally, it returns the shortest palindrome by adding the reverse of the remaining part of the string s (from the position indicated by the last value of the prefix function to the end) to the beginning of the original string s.
+
+Time complexity ---> O(n) n is the length of the string. This is because it computes the prefix function in a single pass through the string, and each operation inside the loop takes constant time.
+Space complexity --> O(n) because it stores the prefix function for the entire string, which requires linear space. The input string itself is not counted towards the space complexity, as it is an input to the function.
+
+
+
+
+
+
